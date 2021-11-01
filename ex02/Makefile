@@ -1,7 +1,7 @@
 CXX			:=	clang++
 CXXFLAGS	:=	-Wall -Wextra -Werror -std=c++98
 NAME		:=	exe
-SRCS		:=	main.cpp Zombie.cpp ZombieHorde.cpp
+SRCS		:=	main.cpp
 OBJS		:=	$(SRCS:.cpp=.o)
 
 .PHONY		:	all clean fclean re

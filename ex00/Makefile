@@ -10,7 +10,6 @@ all			:	$(NAME)
 $(NAME)		:	$(OBJS)
 	$(CXX) $(CXXFLAGS) -o $(NAME) $(OBJS)
 
-
 clean		:
 	$(RM) -rf $(OBJS)
 
