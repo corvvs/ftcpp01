@@ -1,7 +1,7 @@
 CXX			:=	clang++
 CXXFLAGS	:=	-Wall -Wextra -Werror -std=c++98
-NAME		:=	replace
-SRCS		:=	main.cpp
+NAME		:=	karen
+SRCS		:=	main.cpp Karen.cpp
 OBJS		:=	$(SRCS:.cpp=.o)
 
 .PHONY		:	all clean fclean re
