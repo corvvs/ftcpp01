@@ -51,7 +51,7 @@ errortest	: $(NAME) $(TESTFILE_UNREADABLE) $(TESTFILE_UNWRITABLE) $(TESTFILE_DIR
 	cat $(TESTFILE_UNWRITABLE).replace
 	@@echo
 	@@echo "[from directory]"
-	! ./$(NAME) $(TESTFILE_DIR) a b
+	./$(NAME) $(TESTFILE_DIR) a b
 	@@echo
 	@@echo "[to directory]"
 	! ./$(NAME) Makefile a b
