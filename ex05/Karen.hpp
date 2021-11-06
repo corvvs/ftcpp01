@@ -11,6 +11,7 @@ class Karen {
         void    complain(std::string level);
 
     private:
+        void    nothing(void);
         void    debug(void);
         void    info(void);
         void    warning(void);

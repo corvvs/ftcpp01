@@ -8,4 +8,8 @@ int main() {
     smith.complain("INFO");
     smith.complain("WARNING");
     smith.complain("ERROR");
+    smith.complain("DEBUG");
+    smith.complain("INFO");
+    smith.complain("WARNING");
+    smith.complain("ERROR");
 }

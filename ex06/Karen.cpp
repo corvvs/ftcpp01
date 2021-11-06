@@ -10,13 +10,13 @@ const std::string Karen::kLevelNames[] = {
 };
 
 const std::string Karen::kDebugMessage_
-    = "debug!!";
+    = "I am Karen, 6 years old.";
 const std::string Karen::kInfoMessage_
-    = "info!!";
+    = "I am Karen, I'm on my way to your house.";
 const std::string Karen::kWarningMessage_
-    = "warning!!";
+    = "I am Karen, I'm in front of your house.";
 const std::string Karen::kErrorMessage_
-    = "We are the Borg. You will be assimilated. Resistance is futile.";
+    = "I am Karen, I'm behind you now.";
 
 void    Karen::complain(std::string level) {
     KarenSayer available_sayers[] = {
@@ -25,7 +25,7 @@ void    Karen::complain(std::string level) {
         &Karen::warning,
         &Karen::error,
     };
-    KarenSayer sayer = NULL;
+    KarenSayer sayer = &Karen::nothing;
     for (std::size_t i = 0; i < kKarenLogLevels; i += 1) {
         std::string target_level = Karen::kLevelNames[i];
         if (level == target_level) {
@@ -33,9 +33,7 @@ void    Karen::complain(std::string level) {
             break;
         }
     }
-    if (sayer) {
-        (this->*sayer)();
-    }
+    (this->*sayer)();
 }
 
 void    Karen::filter(std::string min_level) {
@@ -60,6 +58,7 @@ void    Karen::filter(std::string min_level) {
     }
 }
 
+void    Karen::nothing(void) {}
 
 void    Karen::debug(void) {
     std::cout << Karen::kDebugMessage_ << std::endl;

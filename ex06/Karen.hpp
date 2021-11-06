@@ -12,6 +12,7 @@ class Karen {
         void    filter(std::string min_level);
 
     private:
+        void    nothing(void);
         void    debug(void);
         void    info(void);
         void    warning(void);
