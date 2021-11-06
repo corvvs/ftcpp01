@@ -2,23 +2,44 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include <exception>
+#include <stdexcept>
 #include <stdlib.h>
+#include <sys/stat.h>
 
-const std::string   *read_all(
+bool    is_directory(const std::string& filename) {
+    struct stat	sb;
+
+    int rv = stat(filename.c_str(), &sb);
+    if (rv < 0 || S_ISDIR(sb.st_mode))
+    {
+        return true;
+    }
+    return false;
+}
+
+const std::string   read_all(
     const std::string& filename
 ) {
     std::ifstream ifs(filename);
     if (!ifs.is_open()) {
+        throw std::string("Error: can't open a file: ") + filename;
+    }
+    if (is_directory(filename)) {
         ifs.close();
-        return NULL;
+        throw std::string("Error: is a directory: ") + filename;
     }
     std::ostringstream receiver;
     receiver << ifs.rdbuf();
+    if (!ifs.good() || ifs.fail()) {
+        ifs.close();
+        throw std::string("Error: failed to read from the file: ") + filename;
+    }
     ifs.close();
-    return new std::string(receiver.str());
+    return std::string(receiver.str());
 }
 
-bool    replace_out(
+void    replace_out(
     const std::string& body,
     const std::string& str_from,
     const std::string& str_to,
@@ -34,69 +55,56 @@ bool    replace_out(
             break;
         }
         fout << body.substr(find_head, found_head - find_head);
-        if (fout.bad()) {
+        if (!fout.good()) {
             break;
         }
         fout << str_to;
-        if (fout.bad()) {
+        if (!fout.good()) {
             break;
         }
         find_head = found_head + from_len;
     }
-    return fout.bad() == false;
 }
 
-bool    replace(
+void    replace(
     const std::string& filename_original,
     const std::string& str_from,
     const std::string& str_to
 ) {
-    const std::string *body = read_all(filename_original);
-    if (!body) {
-        std::cout
-            << "Error: failed to read from input file: "
-            << filename_original
-            << std::endl;
-        return false;
-    }
+    const std::string body = read_all(filename_original);
     const std::string filename_replaced = filename_original + ".replace";
     std::ofstream ofs(filename_replaced);
+    if (is_directory(filename_replaced)) {
+        throw std::string("Error: is a directory: ") + filename_replaced;
+    }
     if (!ofs.is_open()) {
-        std::cout
-            << "Error: failed to open output file: "
-            << filename_replaced
-            << std::endl;
-        delete body;
-        return false;
+        throw std::string("Error: failed to open output file: ") + filename_replaced;
     }
-
-    bool out_succeeded =  replace_out(*body, str_from, str_to, ofs);
-    delete body;
+    replace_out(body, str_from, str_to, ofs);
+    bool out_succeeded = ofs.good();
+    ofs.close();
     if (!out_succeeded) {
-        std::cout
-            << "Error: failed to write to output file: "
-            << filename_replaced
-            << std::endl;
-        return false;
+        throw std::string("Error: failed to write to output file: ") + filename_replaced;
     }
-    return true;
 }
 
 int main(int argc, char **argv) {
-    if (argc != 4) {
-        std::cout << "Error: unexpected arguments" << std::endl;
-        return 1;
+    try {
+        if (argc != 4) {
+            throw std::string("Error: unexpected arguments");
+        }
+        std::string filename = std::string(argv[1]);
+        std::string s1 = std::string(argv[2]);
+        std::string s2 = std::string(argv[3]);
+        if (filename.empty() || s1.empty() || s2.empty()) {
+            throw std::string("Error: detected empty string");
+        }
+        replace(filename, s1, s2);
+        return 0;
+    } catch (std::exception& e) {
+        std::cout << e.what() << std::endl;
+    } catch (std::string& errstr) {
+        std::cout << errstr << std::endl;
     }
-    std::string filename = std::string(argv[1]);
-    std::string s1 = std::string(argv[2]);
-    std::string s2 = std::string(argv[3]);
-    if (filename.empty() || s1.empty() || s2.empty()) {
-        std::cout << "Error: detected empty string" << std::endl;
-        return 1;
-    }
-    bool replace_succeeded = replace(filename, s1, s2);
-    if (!replace_succeeded) {
-        return 1;
-    }
-    return 0;
+    return 1;
 }

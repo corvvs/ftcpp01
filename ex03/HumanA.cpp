@@ -10,3 +10,11 @@ void    HumanA::attack(void) {
         << weapon_.getType()
         << std::endl;
 }
+
+Weapon&     HumanA::getWeapon(void) const {
+    return weapon_;
+}
+
+std::string HumanA::getName(void) const {
+    return name_;
+}

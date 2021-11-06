@@ -9,6 +9,8 @@ class HumanA {
     public:
         HumanA(std::string name, Weapon& weapon);
         void        attack(void);
+        Weapon&     getWeapon(void) const;
+        std::string getName(void) const;
 
     private:
         Weapon&     weapon_;

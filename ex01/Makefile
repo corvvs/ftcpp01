@@ -1,5 +1,5 @@
 CXX			:=	clang++
-CXXFLAGS	:=	-Wall -Wextra -Werror -std=c++98
+CXXFLAGS	:=	-Wall -Wextra -Werror -std=c++98 --pedantic
 NAME		:=	exe
 SRCS		:=	main.cpp Zombie.cpp ZombieHorde.cpp
 OBJS		:=	$(SRCS:.cpp=.o)

@@ -6,6 +6,6 @@ void                Weapon::setType(std::string type) {
     type_ = type;
 }
 
-const std::string&  Weapon::getType(void) {
+const std::string&  Weapon::getType(void) const {
     return type_;
 }
