@@ -71,7 +71,8 @@ void    Karen::print_filter_item(const std::size_t level_index) {
     std::cout
         << ("[ " + Karen::kLevelNames[level_index] + " ]")
         << std::endl;
-    (this->*Karen::kSayers[level_index])();
+    KarenSayer sayer = Karen::kSayers[level_index];
+    (this->*sayer)();
     std::cout << std::endl;
 }
 
