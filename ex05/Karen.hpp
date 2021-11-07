@@ -17,6 +17,11 @@ class Karen {
         void    warning(void);
         void    error(void);
 
+        std::size_t find_index(
+            const std::string& level,
+            const std::size_t current_index
+        );
+
         const static std::string    kLevelNames[];
         const static std::string    kDebugMessage_;
         const static std::string    kInfoMessage_;

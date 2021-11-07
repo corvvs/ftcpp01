@@ -24,15 +24,10 @@ void    Karen::complain(std::string level) {
         &Karen::info,
         &Karen::warning,
         &Karen::error,
+        &Karen::nothing
     };
-    KarenSayer sayer = &Karen::nothing;
-    for (std::size_t i = 0; i < kKarenLogLevels; i += 1) {
-        std::string target_level = Karen::kLevelNames[i];
-        if (level == target_level) {
-            sayer = available_sayers[i];
-            break;
-        }
-    }
+    const std::size_t index = find_index(level, 0);
+    KarenSayer sayer = available_sayers[index];
     (this->*sayer)();
 }
 
@@ -52,4 +47,15 @@ void    Karen::warning(void) {
 
 void    Karen::error(void) {
     std::cout << Karen::kErrorMessage_ << std::endl;
+}
+
+std::size_t Karen::find_index(
+    const std::string& level,
+    const std::size_t current_index
+) {
+    return current_index >= kKarenLogLevels
+        ? kKarenLogLevels
+        : level == Karen::kLevelNames[current_index]
+            ? current_index
+            : find_index(level, current_index + 1);
 }

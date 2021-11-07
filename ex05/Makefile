@@ -17,3 +17,7 @@ fclean		:	clean
 	$(RM) $(NAME)
 
 re			:	fclean all
+
+.PHONY		:	noif
+noif		:
+	grep -E "if|else|else if" * -w --col
